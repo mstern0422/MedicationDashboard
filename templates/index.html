@@ -1,15 +1,21 @@
 <!DOCTYPE html>
-<html lang = "en">
+<html lang="en">
 <head>
-    <meta charset = "UTF-8">
-    <meta name = "viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Medication Dashboard</title>
-    <link rel = "stylesheet" href = "style.css">
+    <link rel="stylesheet" href="style.css">
+    <link href='http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css' rel='stylesheet' type='text/css'>
 </head>
 <body>
     <div class="container">
         <h1>Welcome to the Medication Dashboard</h1>
         <p>This is a simple dashboard to display medication information.</p>
-    </div>
+        <div class="box">
+            <form action="/search" method="POST" class="search-box">
+                <input type="text" name="drug_name" placeholder="Search for a drug..." required>
+                <button type="submit" class="fa fa-search"></button>
+            </form>
+        </div>
 </body>
 </html>
