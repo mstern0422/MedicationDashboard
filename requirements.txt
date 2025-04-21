@@ -1,6 +1,4 @@
 Flask
 matplotlib
-numpy
 plotly
 re
-pdfplumber
