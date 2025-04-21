@@ -1,25 +1,17 @@
-:root {
-    --clr-dark: #0f172a;
-    --clr-light: #f1f5f9;
-    --clr-accent: #e11d48;
-}
-
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-}
+@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
 
 body {
     margin: 0;
     padding: 50px;
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    color: var(--clr-dark);
-    background-color: var(--clr-light);
+    font-family: 'Righteous', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ff1944;
 }
 
+
 .container {
-    background-color: var(--clr-light);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

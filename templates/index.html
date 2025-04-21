@@ -1,15 +1,51 @@
 <!DOCTYPE html>
-<html lang = "en">
+<html lang="en">
 <head>
-    <meta charset = "UTF-8">
-    <meta name = "viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Medication Dashboard</title>
-    <link rel = "stylesheet" href = "style.css">
+    <link rel="stylesheet" href="style.css">
+    <link href='http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css' rel='stylesheet' type='text/css'>
 </head>
 <body>
     <div class="container">
         <h1>Welcome to the Medication Dashboard</h1>
         <p>This is a simple dashboard to display medication information.</p>
+        <div class="box">
+            <form action="/search" method="POST" class="search-box" onsubmit="alert('Form submitted!');">
+                <input type="text" name="drug_name" placeholder="Search for a drug..." required>
+                <button type="submit" class="fa fa-search"></button>
+            </form>
+        </div>
+
+        // JUST TESTING THAT EVERYTHING WORKS
+        {{ drug_name }}
+        <img src="data:image/png;base64,{{ composition_img }}" />
+        <img src="data:image/png;base64,{{ reviews_img }}" />
+        
+        {% if treatments %}
+          <ul>
+            {% for t in treatments %}
+              <li>{{ t }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        
+        {% if side_effects %}
+          <ul>
+            {% for s in side_effects %}
+              <li>{{ s }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        
+        {% if drug_image %}
+          <img src="{{ drug_image }}" alt="Drug image">
+        {% endif %}
+        
+        {% if not_found %}
+          <p>No matching drug found.</p>
+        {% endif %}
     </div>
 </body>
 </html>
