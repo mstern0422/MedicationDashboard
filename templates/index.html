@@ -4,48 +4,146 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Medication Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fugaz+One&family=Righteous&display=swap" rel="stylesheet">
     <link href='http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css' rel='stylesheet' type='text/css'>
 </head>
+
 <body>
-    <div class="container">
-        <h1>Welcome to the Medication Dashboard</h1>
-        <p>This is a simple dashboard to display medication information.</p>
-        <div class="box">
-            <form action="/search" method="POST" class="search-box" onsubmit="alert('Form submitted!');">
-                <input type="text" name="drug_name" placeholder="Search for a drug..." required>
+    <div class = "header_search_container">
+        <header>
+            <h1 onclick="clearDisplayedData()">MedDash +</h1>
+            <p>Drug info on the go!</p>
+        </header>
+
+        <!-- Search Box -->
+        <div class="search-box-container">
+            <form action="/search" method="POST" class="search-box">
+                <input list="drug-list" name="drug_name" id="drug_name" placeholder="Type a brand name (e.g. Augmentin)" required>
+                <datalist id="drug-list"></datalist>
                 <button type="submit" class="fa fa-search"></button>
             </form>
         </div>
+      </div>
 
-        // JUST TESTING THAT EVERYTHING WORKS
-        {{ drug_name }}
-        <img src="data:image/png;base64,{{ composition_img }}" />
-        <img src="data:image/png;base64,{{ reviews_img }}" />
+      <div class="container">
+        <!-- Drug Info Section -->
+        <section class="drug-info">
+          {% if drug_name %}
+            <h2>{{ drug_name }}</h2>
         
-        {% if treatments %}
-          <ul>
-            {% for t in treatments %}
-              <li>{{ t }}</li>
-            {% endfor %}
-          </ul>
-        {% endif %}
+            <div class="general-info">
+              <h3><strong>Generic Name:</strong> {{ generic_name }}</h3>
+
+              {% if alcohol_warning %}
+                <div class="alcohol-warning">{{ alcohol_warning }}</div>
+              {% endif %}
+              
+              {% if treatments %}
+                <div class="treatments">
+                  <h3>Treatments</h3>
+                  <ul>
+                    {% for t in treatments %}
+                      <li>{{ t }}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
         
-        {% if side_effects %}
-          <ul>
-            {% for s in side_effects %}
-              <li>{{ s }}</li>
-            {% endfor %}
-          </ul>
-        {% endif %}
+              {% if side_effects %}
+                <div class="side-effects">
+                  <h3>Side Effects</h3>
+                  <ul>
+                    {% for s in side_effects %}
+                      <li>{{ s }}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
         
-        {% if drug_image %}
-          <img src="{{ drug_image }}" alt="Drug image">
-        {% endif %}
+              {% if classes %}
+                <div class="classes">
+                  <h3>Classification</h3>
+                  <ul>
+                    {% for c in classes %}
+                      <li>{{ c }}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
+            </div>
         
-        {% if not_found %}
-          <p>No matching drug found.</p>
-        {% endif %}
+            <div class="chart-section">
+              <div class="images">
+                <img src="data:image/png;base64,{{ composition_img }}" alt="Composition Pie Chart" />
+                <img src="data:image/png;base64,{{ reviews_img }}" alt="Reviews Bar Chart" />
+              </div>
+        
+              {% if pregnancy %}
+                <div class="pregnancy">
+                  <h3>Pregnancy Risk</h3>
+                  <ul>{{ pregnancy }}</ul>
+                </div>
+              {% endif %}
+        
+              {% if rx_otc %}
+                <div class="rx_otc">
+                  <h3>Availability</h3>
+                  <ul>{{ rx_otc }}</ul>
+                </div>
+              {% endif %}
+        
+              {% if schedule %}
+                <div class="schedule">
+                  <h3>CSA Schedule</h3>
+                  <ul>{{ schedule }}</ul>
+                </div>
+              {% endif %}
+        
+
+            </div>
+          {% endif %}
+        
+          {% if not_found %}
+            <p class="error-message">No matching drug found.</p>
+          {% endif %}
+        </section>
+        
     </div>
+
+    <!-- Add a script tag for the drug names and autocomplete functionality -->
+    <script>
+        // Fetch drug names from the Flask backend
+        fetch('/api/drug-names')
+            .then(response => response.json())  // Parse the JSON response
+            .then(drugNames => {
+                // Get the input field and datalist element
+                const drugInput = document.getElementById('drug_name');
+                const drugList = document.getElementById('drug-list');
+                
+                // Dynamically populate the datalist with drug names
+                drugNames.forEach(function(name) {
+                    let option = document.createElement('option');
+                    option.value = name;
+                    drugList.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching drug names:', error));
+    </script>
+
+    <!-- Cleardata upon clicking header -->
+    <script>
+      function clearDisplayedData() {
+          // Clear the content dynamically (you can target specific elements)
+          document.querySelector('.drug-info').innerHTML = '';  // Clears drug info section
+          document.querySelector('.treatments').innerHTML = ''; // Clears treatments list
+          document.querySelector('.side-effects').innerHTML = ''; // Clears side effects list
+          document.querySelector('.images').innerHTML = '';  // Clears images (composition and reviews)
+          document.querySelector('.error-message').innerHTML = ''; // Clears error message
+      }
+  </script>
+    </script>
 </body>
 </html>
